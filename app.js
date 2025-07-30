@@ -1,44 +1,54 @@
 const bells = new Audio('./sounds/bell.wav')
 const startBtn = document.querySelector('.btn-start');
 const pauseBtn = document.querySelector('.btn-pause');
-const session = document.querySelector('.minutes');
-let myInterval;
-let state = true;
 
-const appTimer = () => {
-    const sessionAmount = Number.parseInt(session.textContent);
+const minutes = document.querySelector('.minutes');
+const seconds = document.querySelector('.seconds');
 
-    if (state) {
-        state = false;
+let intervalID;
+let isRunning = false;
+
+const startSession = () => {
+    let currentTimeInSeconds = (Number.parseInt(minutes.textContent) * 60) + Number.parseInt(seconds.textContent);
+
+    if (!isRunning) {
+        isRunning = true;
         startBtn.classList.add("hidden");
         pauseBtn.classList.remove("hidden");
-
-        let totalSeconds = sessionAmount * 60;
 
         const updateSeconds = () => {
             const minuteDiv = document.querySelector(".minutes");
             const secondDiv = document.querySelector(".seconds");
 
-            totalSeconds--;
-            let minutesLeft = Math.floor(totalSeconds/60);
-            let secondsLeft = totalSeconds % 60;
+            currentTimeInSeconds--;
+            let timeLeftInMinutes = Math.floor(currentTimeInSeconds/60);
+            let timeLeftInSeconds = currentTimeInSeconds % 60;
 
-            if (secondsLeft < 10) {
-                secondDiv.textContent = "0" + secondsLeft;
+            if (timeLeftInSeconds < 10) {
+                secondDiv.textContent = "0" + timeLeftInSeconds;
             } else {
-                secondDiv.textContent = secondsLeft;
+                secondDiv.textContent = timeLeftInSeconds;
             }
-            minuteDiv.textContent = minutesLeft;
+            minuteDiv.textContent = timeLeftInMinutes;
 
-            if (minutesLeft === 0 && secondsLeft === 0) {
+            if (timeLeftInMinutes === 0 && timeLeftInSeconds === 0) {
                 bells.play();
-                clearInterval(myInterval);
+                clearInterval(intervalID);
             }
         }
-        myInterval = setInterval(updateSeconds, 1000);
+        intervalID = setInterval(updateSeconds, 1000);
     } else {
         alert("Session has already started.");
     }
 }
 
-startBtn.addEventListener('click', appTimer);
+const pauseSession = () => {
+    isRunning = false;
+    startBtn.classList.remove("hidden");
+    pauseBtn.classList.add("hidden");
+
+    clearInterval(intervalID);
+}
+
+startBtn.addEventListener('click', startSession);
+pauseBtn.addEventListener('click', pauseSession);
