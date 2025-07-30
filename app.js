@@ -7,10 +7,10 @@ const seconds = document.querySelector('.seconds');
 
 let intervalID;
 let isRunning = false;
-let currentTimeInSeconds;
+let timeLeftInSeconds;
 
 const startSession = () => {
-    currentTimeInSeconds = (Number.parseInt(minutes.textContent) * 60) + Number.parseInt(seconds.textContent);
+    timeLeftInSeconds = (Number.parseInt(minutes.textContent) * 60) + Number.parseInt(seconds.textContent);
 
     if (!isRunning) {
         isRunning = true;
@@ -24,21 +24,18 @@ const startSession = () => {
 }
 
 const updateSeconds = () => {
-    const minuteDiv = document.querySelector(".minutes");
-    const secondDiv = document.querySelector(".seconds");
+    timeLeftInSeconds--;
+    let minutesLeft = Math.floor(timeLeftInSeconds/60);
+    let secondsLeft = timeLeftInSeconds % 60;
 
-    currentTimeInSeconds--;
-    let timeLeftInMinutes = Math.floor(currentTimeInSeconds/60);
-    let timeLeftInSeconds = currentTimeInSeconds % 60;
-
-    if (timeLeftInSeconds < 10) {
-        secondDiv.textContent = "0" + timeLeftInSeconds;
+    if (secondsLeft < 10) {
+        seconds.textContent = "0" + secondsLeft;
     } else {
-        secondDiv.textContent = timeLeftInSeconds;
+        seconds.textContent = secondsLeft;
     }
-    minuteDiv.textContent = timeLeftInMinutes;
+    minutes.textContent = minutesLeft;
 
-    if (timeLeftInMinutes === 0 && timeLeftInSeconds === 0) {
+    if (minutesLeft === 0 && secondsLeft === 0) {
         bells.play();
         clearInterval(intervalID);
     }
