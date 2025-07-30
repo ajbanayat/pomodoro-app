@@ -17,6 +17,10 @@ p {
     margin: 0;
 }
 
+.hidden {
+    display: none;
+}
+
 .app-message {
     height: 20px;
     margin: 10px auto 20px auto;

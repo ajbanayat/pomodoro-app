@@ -1,5 +1,6 @@
 const bells = new Audio('./sounds/bell.wav')
 const startBtn = document.querySelector('.btn-start');
+const pauseBtn = document.querySelector('.btn-pause');
 const session = document.querySelector('.minutes');
 let myInterval;
 let state = true;
@@ -9,6 +10,9 @@ const appTimer = () => {
 
     if (state) {
         state = false;
+        startBtn.classList.add("hidden");
+        pauseBtn.classList.remove("hidden");
+
         let totalSeconds = sessionAmount * 60;
 
         const updateSeconds = () => {
